@@ -23,6 +23,7 @@ public class test extends JFrame  implements ActionListener{
 	public int RETU= 20;  //教室の縦のセル数（列数）                   〃
 //	int flag = 0;         //決定しないと次のテーブルを出せないようにするもの
 	int flag2 = 0;        //どのラジオボタンがチェックされているか判断するもの
+	int cell[] = new int[350];//セルに机があるかどうかを保存する。番号の振り方はプログラムの下に示す
 	int pos[]= new int[50];//机の左上の位置を保存する。番号の振り方はプログラムの下に示す
 	int muki[] = new int[50];//机の向き情報。0なら横向き1なら縦向き
 	JTextField name = new JTextField();
@@ -246,6 +247,7 @@ public class test extends JFrame  implements ActionListener{
 			radio[count].setSelected(true);//新たに作ったラジオボタンをチェック
 			flag2=count;
 			pos[count]=1;//x=0,y=0に造るから
+			cell[1] = cell[2] = cell[1+RETU] = cell[2+RETU]= cell[1+2*RETU] = cell[2+2*RETU] += 1;//机のあるセルに1を与える
 			count++;
 //			flag =1;
 
@@ -259,6 +261,8 @@ public class test extends JFrame  implements ActionListener{
 			int x = student[flag2].getLocation().x;
 			int y = student[flag2].getLocation().y-TATE*i-i;
 			student[flag2].setBounds(new Rectangle(x, y, YOKO*2+1, TATE*3+2));
+			cell[pos[flag2]+2*RETU] = cell[pos[flag2]+1+2*RETU] = 0;//横向きだと触れていて、縦向きだと触れていないセルに0を与える
+			cell[pos[flag2]+2-3*i] = cell[pos[flag2]+2+RETU-3*i] = 1;//縦向きだと触れていて、横向きだと触れていないセルに1を与える
 			muki[flag2] = 1;
 			pos[flag2] = pos[flag2] - i;
 		}
@@ -271,65 +275,107 @@ public class test extends JFrame  implements ActionListener{
 			int x = student[flag2].getLocation().x-i*YOKO-i;
 			int y = student[flag2].getLocation().y;
 			student[flag2].setBounds(new Rectangle(x, y, YOKO*3+2, TATE*2+1));
+			cell[pos[flag2]+2*RETU-3*i*RETU] = cell[pos[flag2]+1+2*RETU-3*i*RETU] = 1;//縦向きだと触れていなくて、横向きだと触れているセルに1を与える
+			cell[pos[flag2]+2] = cell[pos[flag2]+2+RETU] = 0;//縦向きだと触れていて、横向きだと触れていないセルに0を与える
 			muki[flag2]=0;
 			pos[flag2] = pos[flag2] - i*RETU;
 		}
 		private void R_actionPerformed(ActionEvent e) {  //右に
-			if(muki[flag2]==0 && pos[flag2] <= (GYO-3)*RETU || muki[flag2]==1 && pos[flag2] <= (GYO-2)*RETU){//右端じゃあない場合
-				for(int i =0;i<count;i++){//作った机すべてに対して重なるかどうか調べる
-					if(muki[flag2]==1&&pos[i]<pos[flag2]+2*RETU+3&&pos[i]>pos[flag2]+2*RETU-2||muki[flag2]==1&&muki[i]==1&&pos[i]==pos[flag2]+2*RETU-2
-							||muki[flag2]==0&&pos[i]<pos[flag2]+3*RETU+2&&pos[i]>pos[flag2]+3*RETU-2||muki[flag2]==0&&pos[i]==pos[flag2]+3*RETU-2){
-						comment.setText("空気呼んで！！！！");
-					}
+			if(muki[flag2]==0 && pos[flag2] <= (GYO-3)*RETU || muki[flag2]==1 && pos[flag2] <= (GYO-2)*RETU){//右端じゃない時
+				if(muki[flag2]==0&&cell[pos[flag2]+3*RETU]+cell[pos[flag2]+3*RETU+1]==0||//右のセルにすでにテーブルがないか
+						muki[flag2]==1&&cell[pos[flag2]+2*RETU]+cell[pos[flag2]+2*RETU+1]+cell[pos[flag2]+2*RETU+2]==0){
+					comment.setText("");
 				}
+				else {comment.setText("重なってますよ");}
+					if(muki[flag2]==0){//横の時
+						cell[pos[flag2]] = cell[pos[flag2]+1] -= 1;//移動前にあって、異動後に亡くなるセルを－１
+						cell[pos[flag2]+3*RETU] = cell[pos[flag2]+3*RETU+1] += 1;//異動前に無くて、異動後にあるセルを＋１
+					}
+					else{//縦の時
+						cell[pos[flag2]] = cell[pos[flag2]+1] = cell[pos[flag2]+2] -= 1;
+						cell[pos[flag2]+2*RETU] = cell[pos[flag2]+2*RETU+1] = cell[pos[flag2]+2*RETU+2] += 1;
+					}
 			pos[flag2]=pos[flag2]+RETU;//右に行くので位置がGYOだけずれる
 			int x = student[flag2].getLocation().x+YOKO+1;
 			int y = student[flag2].getLocation().y;
 			Point p = new Point(x,y);
 			student[flag2].setLocation(p);
 
-
 			}
 			else {comment.setText("それ以上右にはいけません！！");}
 		}
 		private void L_actionPerformed(ActionEvent e) { //左に
-			if(pos[flag2]>RETU){
-			pos[flag2]=pos[flag2]-RETU;//左に行くので位置がGYOだけずれる
+			if(pos[flag2]>RETU){//左端の時
+				if(muki[flag2]==0 && cell[pos[flag2]-RETU]+cell[pos[flag2]-RETU+1] == 0||
+						muki[flag2]==1 && cell[pos[flag2]-RETU]+cell[pos[flag2]-RETU+1]+cell[pos[flag2]-RETU+2] == 0){
+					comment.setText("");
+				}
+				else {comment.setText("重なってますよ");}
+					if(muki[flag2]==0){//横の時
+						cell[pos[flag2]+2*RETU] = cell[pos[flag2]+2*RETU+1] -= 1;
+						cell[pos[flag2]-RETU] = cell[pos[flag2]-RETU+1] += 1;
+					}
+					else{//縦の時
+						cell[pos[flag2]+RETU] = cell[pos[flag2]+RETU+1] = cell[pos[flag2]+RETU+2]-=1;
+						cell[pos[flag2]-RETU] = cell[pos[flag2]-RETU+1] = cell[pos[flag2]-RETU+2]+=1;
+					}
+					pos[flag2]=pos[flag2]-RETU;//左に行くので位置がGYOだけずれる
 			int x = student[flag2].getLocation().x-YOKO-1;
 			int y = student[flag2].getLocation().y;
 			Point p = new Point(x,y);
 			student[flag2].setLocation(p);
+
+
 			}
 			else {comment.setText("それ以上左にはいけません！！");}
 			}
 		private void U_actionPerformed(ActionEvent e) {  //上に
-			if(pos[flag2]%RETU!=1){
+			if(pos[flag2]%RETU!=1){//一番上の時
+				if(muki[flag2]==0&&cell[pos[flag2]-1]+cell[pos[flag2]-1+RETU]+cell[pos[flag2]-1+2*RETU]==0||
+						muki[flag2]==1&&cell[pos[flag2]-1]+cell[pos[flag2]-1+RETU]==0){
+					comment.setText("");
+					}
+				else {comment.setText("重なってますよ");}
+					if(muki[flag2]==0){//横向き
+						cell[pos[flag2]+1] = cell[pos[flag2]+RETU+1] = cell[pos[flag2]+2*RETU+1] -= 1;
+						cell[pos[flag2]-1]= cell[pos[flag2]+RETU-1] = cell[pos[flag2]+2*RETU-1] += 1;
+					}
+					else{//縦向き
+						cell[pos[flag2]+2] = cell[pos[flag2]+RETU+2] -= 1;
+						cell[pos[flag2]-1] = cell[pos[flag2]+RETU-1] += 1;
+					}
 			pos[flag2]--;
 			int x = student[flag2].getLocation().x;
 			int y = student[flag2].getLocation().y-TATE-1;
 			Point p = new Point(x,y);
 			student[flag2].setLocation(p);
+
 			}
 			else {comment.setText("それ以上上にはいけません!！");}
 			}
 		private void D_actionPerformed(ActionEvent e) { //下に
-//		if(muki[flag2]==0 && cell[pos[flag2]+2]==0 && cell[pos[flag2]+2+RETU]==0 && cell[pos[flag2]+2+2*RETU]==0
-//		|| muki[flag2]==1 && cell[pos[flag2]+3]==0 && cell[pos[flag2]+3+RETU]==0){//下に行ったときに触れるセルに他の机がないか縦の場合と横の場合に分けて判定
-
-//			if(muki[flag2] == 0){//横向きなら
-//				cell[pos[flag2]] = cell[pos[flag2]+RETU] = cell[pos[flag2]+2*RETU]=0;//移動前に机があって、移動後になくなるセルに０を与える
-//				cell[pos[flag2]+2] = cell[pos[flag2]+RETU+2] = cell[pos[flag2]+2*RETU+2]=1;//移動前に机がなくて、移動後にあるセルに１を与える
-//					            }
-			if(muki[flag2]==0&&pos[flag2]%RETU!=RETU-1 || muki[flag2] ==1 && pos[flag2]%RETU!=RETU-2){
+			if(muki[flag2]==0&&pos[flag2]%RETU!=RETU-1 || muki[flag2] ==1 && pos[flag2]%RETU!=RETU-2){//一番下じゃない時
+     	if(muki[flag2]==0 && cell[pos[flag2]+2]+cell[pos[flag2]+2+RETU]+cell[pos[flag2]+2+2*RETU]==0||
+		 muki[flag2]==1 && cell[pos[flag2]+3]+cell[pos[flag2]+3+RETU]==0){//下に行ったときに触れるセルに他の机がないか縦の場合と横の場合に分けて判定
+			comment.setText("");
+		}
+ 	else {comment.setText("重なってますよ");}
+			if(muki[flag2] == 0){//横向きなら
+				cell[pos[flag2]] = cell[pos[flag2]+RETU] = cell[pos[flag2]+2*RETU]-=1;//移動前に机があって、移動後になくなるセルに０を与える
+				cell[pos[flag2]+2] = cell[pos[flag2]+RETU+2] = cell[pos[flag2]+2*RETU+2]+=1;//移動前に机がなくて、移動後にあるセルに１を与える
+					            }
+			else{//縦向きなら
+			    cell[pos[flag2] = cell[pos[flag2]+RETU]] -= 1;
+			    cell[pos[flag2+3]] = cell[pos[flag2]+RETU+3] += 1;
+			}
 				int x = student[flag2].getLocation().x;
 				int y = student[flag2].getLocation().y+(TATE+1);
 				Point p = new Point(x,y);
 				student[flag2].setLocation(p);
 			pos[flag2]++;
-			}
+     	}
 			else {comment.setText("それ以上下にはいけません！！");}
 		}
-//		}
 		/*操作中のテーブルを固定*/
 		/*
 				private void END_actionPerformed(ActionEvent e) {

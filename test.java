@@ -247,7 +247,12 @@ public class test extends JFrame  implements ActionListener{
 			radio[count].setSelected(true);//新たに作ったラジオボタンをチェック
 			flag2=count;
 			pos[count]=1;//x=0,y=0に造るから
-			cell[1] = cell[2] = cell[1+RETU] = cell[2+RETU]= cell[1+2*RETU] = cell[2+2*RETU] += 1;//机のあるセルに1を与える
+			cell[1]++;
+			cell[2]++;
+			cell[1+RETU]++;
+			cell[2+RETU]++;
+			cell[1+2*RETU]++;
+			cell[2+2*RETU]++;//机のあるセルに1を与える
 			count++;
 //			flag =1;
 
@@ -261,8 +266,10 @@ public class test extends JFrame  implements ActionListener{
 			int x = student[flag2].getLocation().x;
 			int y = student[flag2].getLocation().y-TATE*i-i;
 			student[flag2].setBounds(new Rectangle(x, y, YOKO*2+1, TATE*3+2));
-			cell[pos[flag2]+2*RETU] = cell[pos[flag2]+1+2*RETU] = 0;//横向きだと触れていて、縦向きだと触れていないセルに0を与える
-			cell[pos[flag2]+2-3*i] = cell[pos[flag2]+2+RETU-3*i] = 1;//縦向きだと触れていて、横向きだと触れていないセルに1を与える
+			cell[pos[flag2]+2*RETU]--;
+			cell[pos[flag2]+1+2*RETU]--;//横向きだと触れていて、縦向きだと触れていないセルに0を与える
+			cell[pos[flag2]+2-3*i]++;
+			cell[pos[flag2]+2+RETU-3*i]++;//縦向きだと触れていて、横向きだと触れていないセルに1を与える
 			muki[flag2] = 1;
 			pos[flag2] = pos[flag2] - i;
 		}
@@ -275,8 +282,9 @@ public class test extends JFrame  implements ActionListener{
 			int x = student[flag2].getLocation().x-i*YOKO-i;
 			int y = student[flag2].getLocation().y;
 			student[flag2].setBounds(new Rectangle(x, y, YOKO*3+2, TATE*2+1));
-			cell[pos[flag2]+2*RETU-3*i*RETU] = cell[pos[flag2]+1+2*RETU-3*i*RETU] = 1;//縦向きだと触れていなくて、横向きだと触れているセルに1を与える
-			cell[pos[flag2]+2] = cell[pos[flag2]+2+RETU] = 0;//縦向きだと触れていて、横向きだと触れていないセルに0を与える
+			cell[pos[flag2]+2*RETU-3*i*RETU]++;
+			cell[pos[flag2]+1+2*RETU-3*i*RETU]++;//縦向きだと触れていなくて、横向きだと触れているセルに1を与える
+			cell[pos[flag2]+2]--;cell[pos[flag2]+2+RETU]--;//縦向きだと触れていて、横向きだと触れていないセルに0を与える
 			muki[flag2]=0;
 			pos[flag2] = pos[flag2] - i*RETU;
 		}
@@ -288,12 +296,12 @@ public class test extends JFrame  implements ActionListener{
 				}
 				else {comment.setText("重なってますよ");}
 					if(muki[flag2]==0){//横の時
-						cell[pos[flag2]] = cell[pos[flag2]+1] -= 1;//移動前にあって、異動後に亡くなるセルを－１
-						cell[pos[flag2]+3*RETU] = cell[pos[flag2]+3*RETU+1] += 1;//異動前に無くて、異動後にあるセルを＋１
+						cell[pos[flag2]]--;cell[pos[flag2]+1]--;//移動前にあって、異動後に亡くなるセルを－１
+						cell[pos[flag2]+3*RETU]++;cell[pos[flag2]+3*RETU+1]++;//異動前に無くて、異動後にあるセルを＋１
 					}
 					else{//縦の時
-						cell[pos[flag2]] = cell[pos[flag2]+1] = cell[pos[flag2]+2] -= 1;
-						cell[pos[flag2]+2*RETU] = cell[pos[flag2]+2*RETU+1] = cell[pos[flag2]+2*RETU+2] += 1;
+						cell[pos[flag2]]--;cell[pos[flag2]+1]--;cell[pos[flag2]+2]--;;
+						cell[pos[flag2]+2*RETU]++;cell[pos[flag2]+2*RETU+1]++;cell[pos[flag2]+2*RETU+2]++;
 					}
 			pos[flag2]=pos[flag2]+RETU;//右に行くので位置がGYOだけずれる
 			int x = student[flag2].getLocation().x+YOKO+1;
@@ -312,12 +320,12 @@ public class test extends JFrame  implements ActionListener{
 				}
 				else {comment.setText("重なってますよ");}
 					if(muki[flag2]==0){//横の時
-						cell[pos[flag2]+2*RETU] = cell[pos[flag2]+2*RETU+1] -= 1;
-						cell[pos[flag2]-RETU] = cell[pos[flag2]-RETU+1] += 1;
+						cell[pos[flag2]+2*RETU]--;cell[pos[flag2]+2*RETU+1]--;
+						cell[pos[flag2]-RETU]++;cell[pos[flag2]-RETU+1]++;
 					}
 					else{//縦の時
-						cell[pos[flag2]+RETU] = cell[pos[flag2]+RETU+1] = cell[pos[flag2]+RETU+2]-=1;
-						cell[pos[flag2]-RETU] = cell[pos[flag2]-RETU+1] = cell[pos[flag2]-RETU+2]+=1;
+						cell[pos[flag2]+RETU]--;cell[pos[flag2]+RETU+1]--;cell[pos[flag2]+RETU+2]--;
+						cell[pos[flag2]-RETU]++;cell[pos[flag2]-RETU+1]++;cell[pos[flag2]-RETU+2]++;
 					}
 					pos[flag2]=pos[flag2]-RETU;//左に行くので位置がGYOだけずれる
 			int x = student[flag2].getLocation().x-YOKO-1;
@@ -337,12 +345,12 @@ public class test extends JFrame  implements ActionListener{
 					}
 				else {comment.setText("重なってますよ");}
 					if(muki[flag2]==0){//横向き
-						cell[pos[flag2]+1] = cell[pos[flag2]+RETU+1] = cell[pos[flag2]+2*RETU+1] -= 1;
-						cell[pos[flag2]-1]= cell[pos[flag2]+RETU-1] = cell[pos[flag2]+2*RETU-1] += 1;
+						cell[pos[flag2]+1]--;cell[pos[flag2]+RETU+1]--;cell[pos[flag2]+2*RETU+1]--;;
+						cell[pos[flag2]-1]++;cell[pos[flag2]+RETU-1]++;cell[pos[flag2]+2*RETU-1]++;
 					}
 					else{//縦向き
-						cell[pos[flag2]+2] = cell[pos[flag2]+RETU+2] -= 1;
-						cell[pos[flag2]-1] = cell[pos[flag2]+RETU-1] += 1;
+						cell[pos[flag2]+2]--;cell[pos[flag2]+RETU+2]--;
+						cell[pos[flag2]-1]++;cell[pos[flag2]+RETU-1]++;
 					}
 			pos[flag2]--;
 			int x = student[flag2].getLocation().x;
@@ -361,12 +369,12 @@ public class test extends JFrame  implements ActionListener{
 		}
  	else {comment.setText("重なってますよ");}
 			if(muki[flag2] == 0){//横向きなら
-				cell[pos[flag2]] = cell[pos[flag2]+RETU] = cell[pos[flag2]+2*RETU]-=1;//移動前に机があって、移動後になくなるセルに０を与える
-				cell[pos[flag2]+2] = cell[pos[flag2]+RETU+2] = cell[pos[flag2]+2*RETU+2]+=1;//移動前に机がなくて、移動後にあるセルに１を与える
+				cell[pos[flag2]]--;cell[pos[flag2]+RETU]--;cell[pos[flag2]+2*RETU]--;//移動前に机があって、移動後になくなるセルに０を与える
+				cell[pos[flag2]+2]++;cell[pos[flag2]+RETU+2]++;cell[pos[flag2]+2*RETU+2]++;//移動前に机がなくて、移動後にあるセルに１を与える
 					            }
 			else{//縦向きなら
-			    cell[pos[flag2] = cell[pos[flag2]+RETU]] -= 1;
-			    cell[pos[flag2+3]] = cell[pos[flag2]+RETU+3] += 1;
+			    cell[pos[flag2]]--;cell[pos[flag2]+RETU]--;
+			    cell[pos[flag2+3]]++;cell[pos[flag2]+RETU+3]++;
 			}
 				int x = student[flag2].getLocation().x;
 				int y = student[flag2].getLocation().y+(TATE+1);

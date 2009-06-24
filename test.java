@@ -21,12 +21,12 @@ public class test extends JFrame  implements ActionListener{
 	public int RETU= 20;  //教室の縦のセル数（列数）                   〃
 //	int flag = 0;         //決定しないと次のテーブルを出せないようにするもの
 	int flag2 = 0;        //どのラジオボタンがチェックされているか判断するもの
-	int cell[] = new int[350];//セルに机があるかどうかを保存する。番号の振り方はプログラムの下に示す
+	int cell[] = new int[GYO*RETU+1];//セルに机があるかどうかを保存する。番号の振り方はプログラムの下に示す
 	int pos[]= new int[50];//机の左上の位置を保存する。番号の振り方はプログラムの下に示す
 	int muki[] = new int[50];//机の向き情報。0なら横向き1なら縦向き
 	int color2[] = new int[50];//生徒ごとの色
 	int count = 0;
-	String[] strs = new String[50];
+	String[] strs = new String[50*4];
 	JTextField name = new JTextField();
     JButton make = new JButton();
 	JButton TATEtable = new JButton();
@@ -93,7 +93,7 @@ public class test extends JFrame  implements ActionListener{
 			color[4].setText("紫");
 			color[4].setBounds(GYO*YOKO+370,105,100,20);
 			group2.add(color[4]);
-			color[5].setText("橙");
+			color[5].setText("水色");
 			color[5].setBounds(GYO*YOKO+370,125,100,20);
 			group2.add(color[5]);
 
@@ -118,16 +118,16 @@ public class test extends JFrame  implements ActionListener{
                    /*             ここまでで背景作成                */
 		  comment = new JLabel("コメントが表示されます");
 		 // comment.setBackground(Color.BLACK);
-		  comment.setBounds(new Rectangle(GYO*YOKO+50,(RETU*TATE)-30, 500, 50));
+		  comment.setBounds(new Rectangle(GYO*YOKO+GYO+30,(RETU*TATE)-30, 500, 50));
 		  comment.setOpaque(true);
 		  panel.add(comment,null);
           /*学生の名前を入力するトコ*/
 		  name.setColumns(10);
-		  name.setBounds(new Rectangle((GYO*YOKO) + 50, 20,150,25));
+		  name.setBounds(new Rectangle((GYO*YOKO)+GYO + 30, 20,150,25));
 
           /*テーブルを作成するボタン*/
 		  make.setLabel("テーブル作成");
-		  make.setBounds(new Rectangle((GYO*YOKO) + 50, 60, 120, 25));
+		  make.setBounds(new Rectangle((GYO*YOKO) + GYO+ 30, 60, 120, 25));
 		  make.addActionListener(new java.awt.event.ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 			    make_actionPerformed(e);
@@ -138,7 +138,7 @@ public class test extends JFrame  implements ActionListener{
 
 
 		  TATEtable.setLabel("縦向きに変更");
-		  TATEtable.setBounds(new Rectangle((GYO*YOKO) + 50, 110, 120, 25));
+		  TATEtable.setBounds(new Rectangle((GYO*YOKO) +GYO+ 30, 110, 120, 25));
 		  TATEtable.addActionListener(new java.awt.event.ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 			    TATEtable_actionPerformed(e);
@@ -146,7 +146,7 @@ public class test extends JFrame  implements ActionListener{
 		  });
 
 		  YOKOtable.setLabel("横向きに変更");
-		  YOKOtable.setBounds(new Rectangle((GYO*YOKO) + 50, 160, 120, 25));
+		  YOKOtable.setBounds(new Rectangle((GYO*YOKO) +GYO+ 30, 160, 120, 25));
 		  YOKOtable.addActionListener(new java.awt.event.ActionListener(){
 				public void actionPerformed(ActionEvent e) {
 				    YOKOtable_actionPerformed(e);
@@ -155,7 +155,7 @@ public class test extends JFrame  implements ActionListener{
 
 
 		  delete.setLabel("削除");
-		  delete.setBounds(new Rectangle(GYO*YOKO+50,(RETU*TATE)-60,100, 30));
+		  delete.setBounds(new Rectangle(GYO*YOKO+GYO+30,(RETU*TATE)-60,100, 30));
 		  delete.addActionListener(new java.awt.event.ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		    		delete_actionPerformed(e);
@@ -164,7 +164,7 @@ public class test extends JFrame  implements ActionListener{
 
 
 		    R.setLabel("→");
-		    R.setBounds(new Rectangle(GYO*YOKO+150, 230, 50, 30));
+		    R.setBounds(new Rectangle(GYO*YOKO+GYO+130, 230, 50, 30));
 		    R.addActionListener(new java.awt.event.ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		    		R_actionPerformed(e);
@@ -172,7 +172,7 @@ public class test extends JFrame  implements ActionListener{
 		    	});
 
 		    L.setLabel("←");
-		    L.setBounds(new Rectangle(GYO*YOKO+50, 230, 50, 30));
+		    L.setBounds(new Rectangle(GYO*YOKO+GYO+30, 230, 50, 30));
 		    L.addActionListener(new java.awt.event.ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		    		L_actionPerformed(e);
@@ -180,7 +180,7 @@ public class test extends JFrame  implements ActionListener{
 		    	});
 
 		    U.setLabel("↑");
-		    U.setBounds(new Rectangle(GYO*YOKO+100, 200, 50, 30));
+		    U.setBounds(new Rectangle(GYO*YOKO+GYO+80, 200, 50, 30));
 		    U.addActionListener(new java.awt.event.ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		    		U_actionPerformed(e);
@@ -188,7 +188,7 @@ public class test extends JFrame  implements ActionListener{
 		    	});
 
 		    D.setLabel("↓");
-		    D.setBounds(new Rectangle(GYO*YOKO+100, 260, 50, 30));
+		    D.setBounds(new Rectangle(GYO*YOKO+GYO+80, 260, 50, 30));
 		    D.addActionListener(new java.awt.event.ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		    		D_actionPerformed(e);
@@ -196,7 +196,7 @@ public class test extends JFrame  implements ActionListener{
 		    	});
 
 		    print.setLabel("印刷");
-			print.setBounds(new Rectangle(GYO*YOKO+160,(RETU*TATE)-60,100, 30));
+			print.setBounds(new Rectangle(GYO*YOKO+GYO+140,(RETU*TATE)-60,100, 30));
 			print.addActionListener(new java.awt.event.ActionListener() {
 			  	public void actionPerformed(ActionEvent e) {
 			  		print_actionPerformed(e);
@@ -205,7 +205,7 @@ public class test extends JFrame  implements ActionListener{
 
 
 		    input.setLabel("読み込み");
-			input.setBounds(new Rectangle(GYO*YOKO+160,(RETU*TATE)-110,100, 30));
+			input.setBounds(new Rectangle(GYO*YOKO+GYO+140,(RETU*TATE)-110,100, 30));
 			input.addActionListener(new java.awt.event.ActionListener() {
 			  	public void actionPerformed(ActionEvent e) {
 			  		input_actionPerformed(e);
@@ -213,7 +213,7 @@ public class test extends JFrame  implements ActionListener{
 
 			  	});
 			output.setLabel("保存");
-			output.setBounds(new Rectangle(GYO*YOKO+50,(RETU*TATE)-110,100, 30));
+			output.setBounds(new Rectangle(GYO*YOKO+GYO+30,(RETU*TATE)-110,100, 30));
 			output.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					output_actionPerformed(e);
@@ -233,7 +233,6 @@ public class test extends JFrame  implements ActionListener{
 		    panel.add(print);
 		    panel.add(input);
 		    panel.add(output);
-//		    panel.add(END);
 
 
 
@@ -254,13 +253,13 @@ public class test extends JFrame  implements ActionListener{
 			}
 
 			if(true==color[0].isSelected()){
-				student[count].setBackground(Color.RED);
+				   student[count].setBackground(new Color(255,91,91));
 			}
 			if(true==color[1].isSelected()){
-				student[count].setBackground(Color.BLUE);
+				   student[count].setBackground(new Color(0,154,214));
 			}
 			if(true==color[2].isSelected()){
-				student[count].setBackground(Color.YELLOW);
+				   student[count].setBackground(new Color(255,255,50));
 			}
 			if(true==color[3].isSelected()){
 				student[count].setBackground(Color.GREEN);
@@ -269,13 +268,14 @@ public class test extends JFrame  implements ActionListener{
 				student[count].setBackground(Color.MAGENTA);
 			}
 			if(true==color[5].isSelected()){
-				student[count].setBackground(Color.ORANGE);
+				   student[count].setBackground(new Color(50,255,255));
 			}
+
 			student[count].setText(str);//テーブルに名前をはる
 			student[count].setHorizontalAlignment(JLabel.CENTER);
 			student[count].setBounds(new Rectangle(0, 0, YOKO*3+2, TATE*2+1));
 			radio[count].setText(str);
-			radio[count].setBounds(GYO*YOKO+250,25+count*20,100,20);
+			radio[count].setBounds(GYO*YOKO+GYO+230,25+count*20,100,20);
 			group.add(radio[count]);
 			radio[count].setSelected(true);//新たに作ったラジオボタンをチェック
 			flag2=count;
@@ -437,15 +437,9 @@ public class test extends JFrame  implements ActionListener{
 				}
 			else {comment.setText("それ以上下にはいけません！！");}
 			}
-		/*操作中のテーブルを固定*/
-		/*
-				private void END_actionPerformed(ActionEvent e) {
-			if(flag==1){
-				count++;
-				flag=0;
-			}
-		}*/
-		//生徒のラジオボタンを押したときの動作
+
+
+		//学生のラジオボタンを押したときの動作
 		public void actionPerformed(ActionEvent e) {
 			flag2=0;
 			for(int i =0;flag2==0;i++){
@@ -459,15 +453,15 @@ public class test extends JFrame  implements ActionListener{
 		//カラーのラジオボタンを押したときの動作
 		private void color_actionPerformed(ActionEvent e) {
 			   if(true==color[0].isSelected()){
-				   student[flag2].setBackground(Color.RED);
+				   student[flag2].setBackground(new Color(255,91,91));
 				   color2[flag2] = 0;
 			   }
 			   if(true==color[1].isSelected()){
-				   student[flag2].setBackground(Color.BLUE);
+				   student[flag2].setBackground(new Color(0,154,214));
 			       color2[flag2] = 1;
 			   }
 			   if(true==color[2].isSelected()){
-				   student[flag2].setBackground(Color.YELLOW);
+				   student[flag2].setBackground(new Color(255,255,50));
 				   color2[flag2] = 2;
 			   }
 			   if(true==color[3].isSelected()){
@@ -479,7 +473,7 @@ public class test extends JFrame  implements ActionListener{
 				   color2[flag2] = 4;
 			   }
 			   if(true==color[5].isSelected()){
-				   student[flag2].setBackground(Color.ORANGE);
+				   student[flag2].setBackground(new Color(50,255,255));
 				   color2[flag2] = 5;
 			   }
 		}
@@ -501,7 +495,8 @@ public class test extends JFrame  implements ActionListener{
 						muki[flag2+i]=muki[flag2+i+1];
 						String str = radio[flag2+i+1].getText();
 						radio[flag2+i].setText(str);
-						if(student[i]==student[count])break;
+						color2[flag2+i] = color2[flag2+1+i];
+//						if(student[i]==student[count])break;
 						}
 					radio[count-1].setBounds(0,0,0,0);
 					flag2--;
@@ -510,7 +505,6 @@ public class test extends JFrame  implements ActionListener{
 			else{
 					for(int i=0;i+flag2<=48;i++){//空白を詰める
 						pos[i]=pos[i+1];
-						System.out.println(i);
 						student[i]=student[i+1];
 						muki[i]=muki[i+1];
 						String str = radio[i+1].getText();
@@ -527,28 +521,69 @@ public class test extends JFrame  implements ActionListener{
 		private void print_actionPerformed(ActionEvent e) {
 	        PrintJob pjob;
 	        Graphics pg;
+
 	        for(int i=0;i<count;i++){
 	        	if(cell[pos[i]]>=2){//重なっている時
 	    			comment.setText("重なっている部分が無い状態にしてください");
 	    			return;
 	        	}
 	        }
-//	        back.setBackground(Color.WHITE);
+
+			comment.setBounds(new Rectangle(0,0,0,0));
+	        name.setBounds(new Rectangle(0,0,0,0));
+	        make.setBounds(new Rectangle(0,0,0,0));
+	        TATEtable.setBounds(new Rectangle(0,0,0,0));
+	        YOKOtable.setBounds(new Rectangle(0,0,0,0));
+	        delete.setBounds(new Rectangle(0,0,0,0));
+	        R.setBounds(new Rectangle(0,0,0,0));
+	        L.setBounds(new Rectangle(0,0,0,0));
+	        U.setBounds(new Rectangle(0,0,0,0));
+	        D.setBounds(new Rectangle(0,0,0,0));
+	        print.setBounds(new Rectangle(0,0,0,0));
+	        input.setBounds(new Rectangle(0,0,0,0));
+	        output.setBounds(new Rectangle(0,0,0,0));
 			  back.setBounds(new Rectangle(0, 0, 0, 0));
 
 	           pjob = getToolkit().getPrintJob(this, "Printing Test", null);
 	            if (pjob != null) {
 	                 // プリンタに送るイメージを取得する
 	                pg = pjob.getGraphics();
+	                pg.translate(500-(YOKO*GYO+GYO),0);
+
 	                if (pg != null) {
 	                         //このコンポーネントとサブコンポーネントを印刷する
-	                        this.printAll(pg);
+	                        this.print(pg);
 	                        // 印刷に使用したグラフィックスを消去する
 	                        pg.dispose();
 	                }
 	                pjob.end();
 	            }
+
+
+
+	  		  comment.setBounds(new Rectangle(GYO*YOKO+GYO+30,(RETU*TATE)-30, 500, 50));
+		      name.setBounds(new Rectangle((GYO*YOKO) +GYO+30, 20,150,25));
+		      make.setBounds(new Rectangle((GYO*YOKO) + GYO+30, 60, 120, 25));
+		      TATEtable.setBounds(new Rectangle((GYO*YOKO) +GYO+30, 110, 120, 25));
+		      YOKOtable.setBounds(new Rectangle((GYO*YOKO) +GYO+30, 160, 120, 25));
+		      delete.setBounds(new Rectangle(GYO*YOKO+GYO+30,(RETU*TATE)-60,100, 30));
+		      R.setBounds(new Rectangle(GYO*YOKO+GYO+120, 230, 50, 30));
+		      L.setBounds(new Rectangle(GYO*YOKO+GYO+30, 230, 50, 30));
+		      U.setBounds(new Rectangle(GYO*YOKO+GYO+80, 200, 50, 30));
+		      D.setBounds(new Rectangle(GYO*YOKO+GYO+80, 260, 50, 30));
+		      print.setBounds(new Rectangle(GYO*YOKO+GYO+140,(RETU*TATE)-60,100, 30));
+		      input.setBounds(new Rectangle(GYO*YOKO+GYO+140,(RETU*TATE)-110,100, 30));
+		      output.setBounds(new Rectangle(GYO*YOKO+GYO+30,(RETU*TATE)-110,100, 30));
 	  		  back.setBounds(new Rectangle(0, 0, YOKO*GYO+GYO, TATE*RETU+RETU));
+
+
+			  for(int i=0;i<GYO;i++){
+				  for(int i2=0; i2<RETU; i2++){
+					  label[i+i2].setBounds(new Rectangle(0,0,0,0));
+					  label[i+i2].setBounds(new Rectangle(i*YOKO + i, i2*TATE + i2, YOKO, TATE));
+				  }
+			  }
+
 		}
 //インプットを押したときのどうさ
 		private void input_actionPerformed(ActionEvent e) {
@@ -556,6 +591,7 @@ public class test extends JFrame  implements ActionListener{
 			InputStreamReader isr = null;
 			BufferedReader br = null;
 			File file = new File("zaseki.txt");
+			comment.setText("読み込みました");
 			try {
 			  stream = new FileInputStream(file);
 			  isr = new InputStreamReader(stream);
@@ -565,11 +601,13 @@ public class test extends JFrame  implements ActionListener{
 			  String read;
 
 			  while ((read = br.readLine()) != null) {  // 読み込み
+				  System.out.println(c);
 			    strs[c] = read;
 			    c++;
 			  }
 
 			} catch (IOException x) {
+    		comment.setText("読み込みできませんでした");
 			  x.printStackTrace();
 			} finally {
 			  try {
@@ -590,7 +628,7 @@ public class test extends JFrame  implements ActionListener{
 				muki[i]=0;
 			//	radio[flag2+i].setText("");
 				}
-			for(int i =0;i<GYO*RETU;i++){
+			for(int i =0;i<=GYO*RETU;i++){
 				cell[i]=0;
 			}
 			for(int i= 0;i<count;i++){
@@ -602,25 +640,25 @@ public class test extends JFrame  implements ActionListener{
 				color2[i] = Integer.parseInt(strs[i*4+2]);
 				muki[i] = Integer.parseInt(strs[i*4+3]);
 				pos[i] = Integer.parseInt(strs[i*4+4]);
-				student[i].setBounds(new Rectangle((YOKO+1)*(pos[i]/RETU), (TATE+1)*(pos[i]%RETU-1), YOKO*3+2, TATE*2+1));
 				if(muki[i]==0){
+					student[i].setBounds(new Rectangle((YOKO+1)*(pos[i]/RETU), (TATE+1)*(pos[i]%RETU-1), YOKO*3+2, TATE*2+1));
 					cell[pos[i]]++;cell[pos[i]+1]++;cell[pos[i]+RETU]++;cell[pos[i]+1+RETU]++;cell[pos[i]+2*RETU]++;cell[pos[i]+1+2*RETU]++;
 				}
 				else{
+					student[i].setBounds(new Rectangle((YOKO+1)*(pos[i]/RETU), (TATE+1)*(pos[i]%RETU-1), YOKO*2+1, TATE*3+2));
 					cell[pos[i]]++;cell[pos[i]+1]++;cell[pos[i]+2]++;cell[pos[i]+RETU]++;cell[pos[i]+1+RETU]++;cell[pos[i]+2+RETU]++;
 				}
 				radio[i].setBounds(GYO*YOKO+250,25+i*20,100,20);
 
 
-
 				if(color2[i]==0){
-					student[i].setBackground(Color.RED);
+					   student[i].setBackground(new Color(255,91,91));
 				}
 				if(color2[i]==1){
-					student[i].setBackground(Color.BLUE);
+					   student[i].setBackground(new Color(0,154,214));
 				}
 				if(color2[i]==2){
-					student[i].setBackground(Color.YELLOW);
+					   student[i].setBackground(new Color(255,255,50));
 				}
 				if(color2[i]==3){
 					student[i].setBackground(Color.GREEN);
@@ -629,11 +667,9 @@ public class test extends JFrame  implements ActionListener{
 					student[i].setBackground(Color.MAGENTA);
 				}
 				if(color2[i]==5){
-					student[i].setBackground(Color.ORANGE);
+					   student[i].setBackground(new Color(50,255,255));
 				}
 			}
-
-
 		}
 //アウトプットを押したときの動作
 		private void output_actionPerformed(ActionEvent e){
@@ -642,6 +678,7 @@ public class test extends JFrame  implements ActionListener{
 		BufferedWriter bw = null;
 
 			File file = new File("zaseki.txt");
+			comment.setText("保存しました");
 			try {
 			  stream = new FileOutputStream(file);
 			  osr = new OutputStreamWriter(stream);
@@ -661,6 +698,7 @@ public class test extends JFrame  implements ActionListener{
 
 			  }
 			} catch (IOException i) {
+    			comment.setText("保存できませんでした");
 			  i.printStackTrace();
 			} finally {
 			  try {
